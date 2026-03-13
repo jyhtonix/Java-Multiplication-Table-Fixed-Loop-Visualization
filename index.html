@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Multiplication Table - Fixed Loop Visualization</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        
+        .code-panel {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        
+        .code-line {
+            padding: 3px 10px;
+            margin: 2px 0;
+            border-left: 4px solid transparent;
+            transition: background-color 0.3s;
+        }
+        
+        .code-line.current {
+            background-color: #34495e;
+            border-left-color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .code-line.array-fill {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .controls {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .input-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .input-group label {
+            font-weight: bold;
+            min-width: 80px;
+        }
+        
+        .input-group input {
+            padding: 8px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            width: 80px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .execution-info {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .variable-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .variable-item {
+            background-color: white;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .variable-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .variable-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .array-grid {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 2px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            transition: background-color 0.3s;
+        }
+        
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        td {
+            background-color: #f9f9f9;
+        }
+        
+        td.current-cell {
+            background-color: #f1c40f;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+        
+        td.filled-cell {
+            background-color: #27ae60;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @keyframes pulse {
+            0% { background-color: #f1c40f; }
+            50% { background-color: #f39c12; }
+            100% { background-color: #f1c40f; }
+        }
+        
+        .status-message {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .loop-info {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+        }
+        
+        .explanation-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Java Multiplication Table - Fixed Loop Visualization</h1>
+        
+        <div class="explanation-box">
+            <strong>✅ Fixed Issue:</strong> The first cell of each row (j=0) now gets filled correctly! 
+            Watch how each step fills one cell of the multiplication table.
+        </div>
+        
+        <div class="controls">
+            <h2>🔧 Controls</h2>
+            <div class="input-group">
+                <label for="rows">Rows:</label>
+                <input type="number" id="rows" min="1" max="8" value="3">
+                
+                <label for="cols">Columns:</label>
+                <input type="number" id="cols" min="1" max="8" value="4">
+                
+                <button onclick="initializeArray()">Initialize Array</button>
+            </div>
+            
+            <div class="input-group">
+                <button onclick="previousStep()" id="prevBtn">◀ Previous</button>
+                <button onclick="nextStep()" id="nextBtn">Next ▶</button>
+                <button onclick="resetVisualization()">🔄 Reset</button>
+                <button onclick="runToEnd()">⏩ Run to End</button>
+            </div>
+            
+            <div class="status-message" id="statusMessage">
+                Click "Initialize Array" to begin
+            </div>
+        </div>
+        
+        <div class="code-panel">
+            <h2>📝 Java Code</h2>
+            <div id="codeLines">
+                <div class="code-line" id="line1">1  // Get user input</div>
+                <div class="code-line" id="line2">2  int rows = 3;  // For visualization, we set fixed values</div>
+                <div class="code-line" id="line3">3  int columns = 4;</div>
+                <div class="code-line" id="line4">4  </div>
+                <div class="code-line" id="line5">5  int[][] table = new int[rows][columns];</div>
+                <div class="code-line" id="line6">6  </div>
+                <div class="code-line" id="line7">7  for (int i = 0; i < rows; i++) {</div>
+                <div class="code-line" id="line8">8      for (int j = 0; j < columns; j++) {</div>
+                <div class="code-line" id="line9">9          table[i][j] = (i + 1) * (j + 1);</div>
+                <div class="code-line" id="line10">10     }</div>
+                <div class="code-line" id="line11">11 }</div>
+                <div class="code-line" id="line12">12 </div>
+                <div class="code-line" id="line13">13 // Display the table</div>
+            </div>
+        </div>
+        
+        <div class="execution-info">
+            <h2>ℹ️ Execution State</h2>
+            <div class="variable-display" id="variables">
+                <div class="variable-item">
+                    <span class="variable-name">rows:</span>
+                    <span class="variable-value" id="varRows">-</span>
+                </div>
+                <div class="variable-item">
+                    <span class="variable-name">columns:</span>
+                    <span class="variable-value" id="varCols">-</span>
+                </div>
+                <div class="variable-item">
+                    <span class="variable-name">i (row index):</span>
+                    <span class="variable-value" id="vari">-</span>
+                </div>
+                <div class="variable-item">
+                    <span class="variable-name">j (col index):</span>
+                    <span class="variable-value" id="varj">-</span>
+                </div>
+                <div class="variable-item">
+                    <span class="variable-name">Current cell:</span>
+                    <span class="variable-value" id="currentCell">table[?][?]</span>
+                </div>
+                <div class="variable-item">
+                    <span class="variable-name">Calculation:</span>
+                    <span class="variable-value" id="calculation">(?+1) × (?+1) = ?</span>
+                </div>
+            </div>
+            
+            <div class="loop-info" id="loopInfo">
+                Loop Status: Not started
+            </div>
+        </div>
+        
+        <div class="array-grid">
+            <h2>📊 Multiplication Table</h2>
+            <div id="tableContainer"></div>
+        </div>
+        
+        <div class="footer">
+            ✅ FIXED: Each step now properly fills one cell. The first column (j=0) is no longer empty!
+        </div>
+    </div>
+
+    <script>
+        let state = {
+            rows: 3,
+            cols: 4,
+            table: [],
+            i: -1,
+            j: -1,
+            step: 0,
+            maxSteps: 0,
+            isInitialized: false,
+            executionPhase: 'setup' // setup, filling, complete
+        };
+        
+        function initializeArray() {
+            state.rows = parseInt(document.getElementById('rows').value) || 3;
+            state.cols = parseInt(document.getElementById('cols').value) || 4;
+            
+            // Limit to reasonable size for visualization
+            state.rows = Math.min(8, Math.max(1, state.rows));
+            state.cols = Math.min(8, Math.max(1, state.cols));
+            
+            document.getElementById('rows').value = state.rows;
+            document.getElementById('cols').value = state.cols;
+            
+            // Create empty table with all cells showing '?'
+            state.table = Array(state.rows).fill().map(() => Array(state.cols).fill('?'));
+            
+            // Calculate total steps:
+            // 1 step for array creation
+            // 1 step for each cell fill
+            state.maxSteps = 1 + (state.rows * state.cols);
+            
+            state.i = -1;
+            state.j = -1;
+            state.step = 0;
+            state.executionPhase = 'setup';
+            state.isInitialized = true;
+            
+            updateDisplay();
+            updateCodeHighlight(5); // Array declaration line
+            updateStatus(`Array created (${state.rows}x${state.cols}). Click Next to start filling.`);
+        }
+        
+        function nextStep() {
+            if (!state.isInitialized) {
+                initializeArray();
+                return;
+            }
+            
+            if (state.step < state.maxSteps) {
+                state.step++;
+                
+                if (state.executionPhase === 'setup') {
+                    // First step - start the loops
+                    state.executionPhase = 'filling';
+                    state.i = 0;
+                    state.j = 0;
+                    updateCodeHighlight(7); // Outer loop line
+                    updateStatus(`Starting loops: i = ${state.i}, preparing to fill first cell`);
+                } 
+                else if (state.executionPhase === 'filling') {
+                    // Fill the current cell
+                    let value = (state.i + 1) * (state.j + 1);
+                    state.table[state.i][state.j] = value;
+                    
+                    updateStatus(`Filled table[${state.i}][${state.j}] = ${value}`);
+                    updateCodeHighlight(9); // Assignment line
+                    
+                    // Move to next cell
+                    if (state.j < state.cols - 1) {
+                        // Next column in same row
+                        state.j++;
+                    } else {
+                        // Move to next row, first column
+                        if (state.i < state.rows - 1) {
+                            state.i++;
+                            state.j = 0;
+                        } else {
+                            // All cells filled
+                            state.executionPhase = 'complete';
+                            state.i = -1;
+                            state.j = -1;
+                            updateStatus(`✅ Complete! All ${state.rows * state.cols} cells filled.`);
+                            updateCodeHighlight(11); // End of loops
+                        }
+                    }
+                }
+                
+                updateDisplay();
+            }
+        }
+        
+        function previousStep() {
+            // For simplicity, just reset and step forward to previous position
+            // This is easier than implementing backward logic
+            if (state.step > 1) {
+                let targetStep = state.step - 1;
+                resetVisualization();
+                
+                // Step forward to target
+                while (state.step < targetStep) {
+                    nextStep();
+                }
+            }
+        }
+        
+        function resetVisualization() {
+            // Reset to initial state
+            state.table = Array(state.rows).fill().map(() => Array(state.cols).fill('?'));
+            state.i = -1;
+            state.j = -1;
+            state.step = 0;
+            state.executionPhase = 'setup';
+            
+            updateDisplay();
+            updateCodeHighlight(5); // Array declaration
+            updateStatus("Reset complete. Click Next to start filling.");
+        }
+        
+        function runToEnd() {
+            if (!state.isInitialized) {
+                initializeArray();
+            }
+            
+            while (state.executionPhase !== 'complete') {
+                nextStep();
+            }
+        }
+        
+        function updateDisplay() {
+            // Update variables display
+            document.getElementById('varRows').textContent = state.rows;
+            document.getElementById('varCols').textContent = state.cols;
+            document.getElementById('vari').textContent = state.i >= 0 ? state.i : '-';
+            document.getElementById('varj').textContent = state.j >= 0 ? state.j : '-';
+            
+            // Current cell and calculation
+            if (state.i >= 0 && state.j >= 0 && state.i < state.rows && state.j < state.cols) {
+                let currentCellText = `table[${state.i}][${state.j}]`;
+                let calcValue = (state.i + 1) * (state.j + 1);
+                let calculationText = `(${state.i}+1) × (${state.j}+1) = ${calcValue}`;
+                
+                document.getElementById('currentCell').textContent = currentCellText;
+                document.getElementById('calculation').textContent = calculationText;
+            } else {
+                document.getElementById('currentCell').textContent = 'table[?][?]';
+                document.getElementById('calculation').textContent = '—';
+            }
+            
+            // Update loop info
+            let loopInfo = '';
+            if (state.executionPhase === 'setup') {
+                loopInfo = '⏳ Ready to start loops';
+            } else if (state.executionPhase === 'complete') {
+                loopInfo = '✅ All loops completed!';
+            } else if (state.i >= 0 && state.j >= 0) {
+                let cellNumber = (state.i * state.cols + state.j + 1);
+                let totalCells = state.rows * state.cols;
+                loopInfo = `🔄 Filling cell ${cellNumber}/${totalCells}: i = ${state.i} (row ${state.i+1}), j = ${state.j} (col ${state.j+1})`;
+            }
+            document.getElementById('loopInfo').textContent = loopInfo;
+            
+            // Render table
+            renderTable();
+        }
+        
+        function renderTable() {
+            let html = '<table><tr><th>Row\Col</th>';
+            
+            // Column headers
+            for (let j = 0; j < state.cols; j++) {
+                html += `<th>${j + 1}</th>`;
+            }
+            html += '</tr>';
+            
+            // Table rows
+            for (let i = 0; i < state.rows; i++) {
+                html += `<tr><th>${i + 1}</th>`;
+                for (let j = 0; j < state.cols; j++) {
+                    let cellClass = '';
+                    
+                    // Highlight current cell (the one about to be filled)
+                    if (state.i === i && state.j === j && state.executionPhase === 'filling') {
+                        cellClass = 'current-cell';
+                    } 
+                    // Highlight filled cells
+                    else if (state.table[i][j] !== '?') {
+                        cellClass = 'filled-cell';
+                    }
+                    
+                    html += `<td class="${cellClass}">${state.table[i][j]}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            
+            document.getElementById('tableContainer').innerHTML = html;
+        }
+        
+        function updateCodeHighlight(lineNum) {
+            // Reset all highlights
+            for (let i = 1; i <= 13; i++) {
+                let line = document.getElementById(`line${i}`);
+                if (line) {
+                    line.classList.remove('current', 'array-fill');
+                }
+            }
+            
+            // Highlight current line
+            if (lineNum > 0) {
+                let currentLine = document.getElementById(`line${lineNum}`);
+                if (currentLine) {
+                    if (lineNum === 9) {
+                        currentLine.classList.add('array-fill');
+                    } else {
+                        currentLine.classList.add('current');
+                    }
+                }
+            }
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('statusMessage').textContent = message;
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            initializeArray();
+        };
+    </script>
+</body>
+</html>
